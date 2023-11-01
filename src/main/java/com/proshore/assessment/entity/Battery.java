@@ -1,13 +1,16 @@
 package com.proshore.assessment.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
+ * The type Battery.
+ *
  * @author Pramosh Shrestha
- * @created 01/11/2023: 17:43
+ * @created 01 /11/2023: 17:43
  */
 @Getter
 @Setter
@@ -31,6 +34,7 @@ public class Battery {
     @Column(name = "postcode", nullable = false)
     private String postcode;
 
-    @Column(name = "wattage", nullable = false)
-    private Double wattage;
+    @Column(name = "capacity", nullable = false)
+    @Positive
+    private Double capacity;
 }

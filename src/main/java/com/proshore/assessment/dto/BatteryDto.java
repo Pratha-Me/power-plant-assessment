@@ -18,17 +18,29 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class BatteryDto implements Serializable {
 
-    Long id;
+    /**
+     * The Id.
+     */
+    private Long id;
 
+    /**
+     * The Name.
+     */
     @NotNull
     @NotBlank
-    String name;
+    private String name;
 
+    /**
+     * The Postcode.
+     */
     @NotNull
     @NotBlank
-    String postcode;
+    private String postcode;
 
+    /**
+     * The Wattage.
+     */
     @NotNull
     @Positive
-    Double wattage;
+    private Double capacity;
 }
