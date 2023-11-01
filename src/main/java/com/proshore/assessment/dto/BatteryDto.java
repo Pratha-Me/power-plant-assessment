@@ -1,7 +1,34 @@
-package com.proshore.assessment.entity;
+package com.proshore.assessment.dto;
+
+import com.proshore.assessment.entity.Battery;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
- * DTO for {@link com.proshore.assessment.entity.Battery}
+ * DTO for {@link Battery}
  */
-public class BatteryDto {
+@Getter
+@Setter
+@Accessors(chain = true)
+public class BatteryDto implements Serializable {
+
+    Long id;
+
+    @NotNull
+    @NotBlank
+    String name;
+
+    @NotNull
+    @NotBlank
+    String postcode;
+
+    @NotNull
+    @Positive
+    Double wattage;
 }
