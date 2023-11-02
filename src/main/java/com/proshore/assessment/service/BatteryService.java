@@ -3,6 +3,7 @@ package com.proshore.assessment.service;
 import com.proshore.assessment.dto.BatteryDto;
 import com.proshore.assessment.dto.BatteryStatisticDto;
 import com.proshore.assessment.dto.PostCodeRangeDto;
+import com.proshore.assessment.entity.Battery;
 
 import java.util.List;
 
@@ -18,16 +19,16 @@ public interface BatteryService {
     /**
      * <b>Saves the batteries list.</b>
      *
-     * @param batteryDtos {@link BatteryDto}: the persistable battery dtos
+     * @param batteries {@link BatteryDto}: the persistable battery dtos
      * @return List of {@link BatteryDto}
      */
-    List<BatteryDto> saveBatteries(List<BatteryDto> batteryDtos);
+    List<Battery> saveBatteries(List<Battery> batteries);
 
     /**
-     * <b>Gets batteries by criterias.</b>
+     * <b>Gets batteries by criteria.</b>
      *
      * @param postCodeRangeDto {@link PostCodeRangeDto}: the post code range dto
      * @return List of batteries {@link BatteryStatisticDto} by criterias
      */
-    BatteryStatisticDto getBatteriesByCriterias(PostCodeRangeDto postCodeRangeDto);
+    BatteryStatisticDto getBatteriesByCriteria(PostCodeRangeDto postCodeRangeDto);
 }

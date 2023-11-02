@@ -5,6 +5,8 @@ import com.proshore.assessment.entity.Battery;
 import com.proshore.assessment.mapstruct.config.MapstructGlobalConfig;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * The interface Battery object mapper.
  *
@@ -23,10 +25,27 @@ public interface BatteryObjectMapper {
     BatteryDto toDto(Battery battery);
 
     /**
+     * To dto list.
+     *
+     * @param battery the battery
+     * @return the list
+     */
+    List<BatteryDto> toDtos(List<Battery> battery);
+
+    /**
      * To entity battery.
      *
      * @param batteryDto the battery dto
      * @return the battery
      */
     Battery toEntity(BatteryDto batteryDto);
+
+    /**
+     * To entity list.
+     *
+     * @param batteryDto the battery dto
+     * @return the list
+     */
+    List<Battery> toEntities(List<BatteryDto> batteryDto);
+
 }

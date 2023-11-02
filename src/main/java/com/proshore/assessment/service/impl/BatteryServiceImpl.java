@@ -1,10 +1,8 @@
 package com.proshore.assessment.service.impl;
 
-import com.proshore.assessment.dto.BatteryDto;
 import com.proshore.assessment.dto.BatteryStatisticDto;
 import com.proshore.assessment.dto.PostCodeRangeDto;
 import com.proshore.assessment.entity.Battery;
-import com.proshore.assessment.mapstruct.BatteryObjectMapper;
 import com.proshore.assessment.repository.BatteryRepository;
 import com.proshore.assessment.service.BatteryService;
 import lombok.RequiredArgsConstructor;
@@ -24,26 +22,17 @@ import java.util.List;
 public class BatteryServiceImpl implements BatteryService {
 
     private final BatteryRepository batteryRepository;
-    private final BatteryObjectMapper batteryObjectMapper;
 
     @Override
-    public List<BatteryDto> saveBatteries(List<BatteryDto> batteryDtos) {
-        List<Battery> savedBatteries = batteryRepository.saveAll(
-                batteryDtos.stream()
-                        .map(batteryObjectMapper::toEntity)
-                        .toList()
-        );
-
-        return savedBatteries.stream()
-                .map(batteryObjectMapper::toDto)
-                .toList();
+    public List<Battery> saveBatteries(List<Battery> batteries) {
+        return batteryRepository.saveAll(batteries);
     }
 
     @Override
-    public BatteryStatisticDto getBatteriesByCriterias(PostCodeRangeDto postCodeRangeDto) {
+    public BatteryStatisticDto getBatteriesByCriteria(PostCodeRangeDto postCodeRangeDto) {
         List<Battery> fetchedBatteries = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
-//        A guard clause for the case in which the Battery repository returns an empty list
+//        Guard clause for the case in which the Battery repository returns an empty list
         if (fetchedBatteries.isEmpty()) {
             return new BatteryStatisticDto()
                     .setName(Collections.emptyList())

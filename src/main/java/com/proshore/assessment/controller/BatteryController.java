@@ -3,6 +3,8 @@ package com.proshore.assessment.controller;
 import com.proshore.assessment.dto.BatteryDto;
 import com.proshore.assessment.dto.BatteryStatisticDto;
 import com.proshore.assessment.dto.PostCodeRangeDto;
+import com.proshore.assessment.entity.Battery;
+import com.proshore.assessment.mapstruct.BatteryObjectMapper;
 import com.proshore.assessment.service.BatteryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,6 +36,7 @@ import java.util.Optional;
 public class BatteryController {
 
     private final BatteryService batteryService;
+    private final BatteryObjectMapper batteryObjectMapper;
 
     /**
      * <b>Save batteries response entity</b>
@@ -48,8 +51,10 @@ public class BatteryController {
             operationId = "saveBatteries"
     )
     public ResponseEntity<List<BatteryDto>> saveBatteries(@RequestBody @Valid @Size(min = 1) List<BatteryDto> batteryDtos) {
+        List<Battery> savedBatteries = batteryService.saveBatteries(batteryObjectMapper.toEntities(batteryDtos));
+
         return new ResponseEntity<>(
-                batteryService.saveBatteries(batteryDtos),
+                batteryObjectMapper.toDtos(savedBatteries),
                 HttpStatus.CREATED
         );
     }
@@ -80,7 +85,7 @@ public class BatteryController {
     )
     public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> optionalPostCodeRangeDto) {
         return optionalPostCodeRangeDto.map(postCodeRangeDto -> new ResponseEntity<>(
-                batteryService.getBatteriesByCriterias(optionalPostCodeRangeDto.get()),
+                batteryService.getBatteriesByCriteria(optionalPostCodeRangeDto.get()),
                 HttpStatus.OK
         )).orElse(
                 new ResponseEntity<>(
