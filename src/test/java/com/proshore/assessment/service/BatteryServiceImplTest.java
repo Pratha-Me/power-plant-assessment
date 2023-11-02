@@ -79,7 +79,7 @@ class BatteryServiceImplTest {
             .setMinPostCode(MIN_POSTCODE)
             .setMaxPostCode(MAX_POSTCODE);
 
-    private static final List<Battery> fetchedBatteriesByCriteria = savedBatteryEntities
+    private static final List<Battery> fetchedBatteriesByCriteriaSortedByName = savedBatteryEntities
             .stream()
             .sorted(Comparator.comparing(Battery::getName))
             .toList();
@@ -131,13 +131,13 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void getBatteriesByCriteria_shouldCalculateAccurateStatistics() {
+    void getBatteriesByCriteria_shouldReturnAccurateStatistics() {
         int totalCapacity = CAPACITY1 + CAPACITY2 + CAPACITY3;
-        int averageCapacity = (CAPACITY1 + CAPACITY2 + CAPACITY3) / fetchedBatteriesByCriteria.size();
+        int averageCapacity = (CAPACITY1 + CAPACITY2 + CAPACITY3) / fetchedBatteriesByCriteriaSortedByName.size();
 
         // GIVEN
         given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
-                .willReturn(fetchedBatteriesByCriteria);
+                .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
         then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
@@ -150,21 +150,21 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void getBatteriesByCriteria_shouldReturn_alphabeticallyOrderedByName() {
+    void getBatteriesByCriteria_shouldReturn_batteryStatisticObject_withAlphabeticallyOrderedByName() {
         // GIVEN
         given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
-                .willReturn(fetchedBatteriesByCriteria);
+                .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
         then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class);
 
         // ASSERT: Alphabetical order for the name field
-        assertIterableEquals(
-                List.of(CANNINGTON, HAY_STREET, MIDLAND),
-                fetchedBatteriesByCriteria.stream()
-                        .map(Battery::getName)
-                        .toList()
-        );
+        final List<String> actualSortedName = fetchedBatteriesByCriteriaSortedByName.stream()
+                .map(Battery::getName)
+                .toList();
+        final List<String> expectedSortedName = List.of(CANNINGTON, HAY_STREET, MIDLAND);
+
+        assertIterableEquals(expectedSortedName, actualSortedName);
     }
 }
