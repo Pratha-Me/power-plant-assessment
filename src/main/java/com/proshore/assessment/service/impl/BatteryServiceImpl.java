@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The type Battery service.
+ * <b>The type Battery service</b>
  *
  * @author Pramosh Shrestha
  * @created 01 /11/2023: 19:33
@@ -43,6 +43,7 @@ public class BatteryServiceImpl implements BatteryService {
     public BatteryStatisticDto getBatteriesByCriterias(PostCodeRangeDto postCodeRangeDto) {
         List<Battery> fetchedBatteries = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
+//        A guard clause for the case in which the Battery repository returns an empty list
         if (fetchedBatteries.isEmpty()) {
             return new BatteryStatisticDto()
                     .setName(Collections.emptyList())
@@ -50,6 +51,7 @@ public class BatteryServiceImpl implements BatteryService {
                     .setAverageWattCapacity(0);
         }
 
+//        Calculation for the statistics (like the sum and the average of the capacity in watts)
         int totalWattCapacity = fetchedBatteries.stream()
                 .mapToInt(Battery::getCapacity)
                 .sum();

@@ -3,6 +3,7 @@ package com.proshore.assessment.controller;
 import com.proshore.assessment.dto.BatteryDto;
 import com.proshore.assessment.dto.BatteryStatisticDto;
 import com.proshore.assessment.dto.PostCodeRangeDto;
+import com.proshore.assessment.entity.Battery;
 import com.proshore.assessment.service.BatteryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The type Battery controller.
+ * <b>The type Battery controller</b>
  *
  * @author Pramosh Shrestha
  * @created 01 /11/2023: 19:33
@@ -30,10 +31,10 @@ public class BatteryController {
     private final BatteryService batteryService;
 
     /**
-     * Save batteries response entity.
+     * <b>Save batteries response entity</b>
      *
-     * @param batteryDtos the battery dtos
-     * @return the response entity
+     * @param batteryDtos {@link BatteryDto} the battery dtos
+     * @return the response entity: {@link ResponseEntity}
      */
     @PostMapping(value = "/all")
     public ResponseEntity<List<BatteryDto>> saveBatteries(@RequestBody @Valid @Size(min = 1) List<BatteryDto> batteryDtos) {
@@ -44,10 +45,10 @@ public class BatteryController {
     }
 
     /**
-     * Gets batteries by criteria.
+     * <b>Gets batteries by criteria</b>
      *
-     * @param optionalPostCodeRangeDto the optional post code range dto
-     * @return the batteries by criteria
+     * @param optionalPostCodeRangeDto {@link Optional} the optional post code range dto
+     * @return the batteries by criteria: {@link ResponseEntity}
      */
     @GetMapping(value = "/criteria")
     public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> optionalPostCodeRangeDto) {

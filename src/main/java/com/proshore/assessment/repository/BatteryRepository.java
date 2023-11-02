@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * The interface Battery repository.
+ * <b>The interface Battery repository</b>
  *
  * @author Pramosh Shrestha
  * @created 01 /11/2023: 19:30
@@ -16,11 +16,13 @@ import java.util.List;
 public interface BatteryRepository extends JpaRepository<Battery, Long> {
 
     /**
-     * Find batteries by postcode between order by name list.
+     * <b>Finds the list of the batteries between the provided postcode range and orders by name.</b>
      *
-     * @param minPostCode the min post code
-     * @param maxPostCode the max post code
-     * @return the list
+     * <p>The query is build via the JPQL from the Spring JPA framework</p>
+     *
+     * @param minPostCode {@link String}: the min post code
+     * @param maxPostCode {@link String}: the max post code
+     * @return List of {@link Battery}
      */
     List<Battery> findBatteriesByPostcodeBetweenOrderByName(String minPostCode, String maxPostCode);
 }
