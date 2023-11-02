@@ -1,6 +1,8 @@
 package com.proshore.assessment.service;
 
 import com.proshore.assessment.dto.BatteryDto;
+import com.proshore.assessment.dto.BatteryStatisticDto;
+import com.proshore.assessment.dto.PostCodeRangeDto;
 
 import java.util.List;
 
@@ -19,4 +21,12 @@ public interface BatteryService {
      * @return the list
      */
     List<BatteryDto> saveBatteries(List<BatteryDto> batteryDtos);
+
+    /**
+     * Gets batteries by criterias.
+     *
+     * @param postCodeRangeDto the post code range dto
+     * @return the batteries by criterias
+     */
+    BatteryStatisticDto getBatteriesByCriterias(PostCodeRangeDto postCodeRangeDto);
 }

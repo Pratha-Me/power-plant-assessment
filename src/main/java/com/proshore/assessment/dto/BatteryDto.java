@@ -42,5 +42,5 @@ public class BatteryDto implements Serializable {
      */
     @NotNull
     @Positive
-    private Double capacity;
+    private Integer capacity;
 }

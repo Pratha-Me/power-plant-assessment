@@ -31,10 +31,10 @@ public class Battery {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "postcode", nullable = false)
+    @Column(name = "post_code", nullable = false)
     private String postcode;
 
     @Column(name = "capacity", nullable = false)
     @Positive
-    private Double capacity;
+    private Integer capacity;
 }
