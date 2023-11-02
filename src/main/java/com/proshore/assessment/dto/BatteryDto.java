@@ -1,6 +1,7 @@
 package com.proshore.assessment.dto;
 
 import com.proshore.assessment.entity.Battery;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -21,6 +22,7 @@ public class BatteryDto implements Serializable {
     /**
      * The Id.
      */
+    @Schema(hidden = true)
     private Long id;
 
     /**
@@ -28,6 +30,7 @@ public class BatteryDto implements Serializable {
      */
     @NotNull
     @NotBlank
+    @Schema(name = "name", example = "Bentley", requiredMode = Schema.RequiredMode.REQUIRED, minLength = 1)
     private String name;
 
     /**
@@ -35,6 +38,7 @@ public class BatteryDto implements Serializable {
      */
     @NotNull
     @NotBlank
+    @Schema(name = "postcode", example = "79225", requiredMode = Schema.RequiredMode.REQUIRED, minLength = 1)
     private String postcode;
 
     /**
@@ -42,5 +46,6 @@ public class BatteryDto implements Serializable {
      */
     @NotNull
     @Positive
+    @Schema(name = "capacity", example = "4920", requiredMode = Schema.RequiredMode.REQUIRED, minimum = "0")
     private Integer capacity;
 }
