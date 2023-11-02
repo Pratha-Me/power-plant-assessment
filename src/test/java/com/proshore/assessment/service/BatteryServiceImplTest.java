@@ -1,9 +1,10 @@
 package com.proshore.assessment.service;
 
+import com.proshore.assessment.dto.BatteryStatisticDto;
+import com.proshore.assessment.dto.PostCodeRangeDto;
 import com.proshore.assessment.entity.Battery;
 import com.proshore.assessment.repository.BatteryRepository;
 import com.proshore.assessment.service.impl.BatteryServiceImpl;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,11 +12,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
@@ -23,63 +25,146 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class BatteryServiceImplTest {
 
-    static final long ID1 = 1L;
-    static final long ID2 = 2L;
-    static final long ID3 = 3L;
-    static final List<Battery> persistableBatteryEntities = new ArrayList<>(3);
-    static final List<Battery> savedBatteryEntities = new ArrayList<>(3);
+    public static final String CANNINGTON = "Cannington";
+    public static final String MIDLAND = "Midland";
+    public static final String HAY_STREET = "Hay Street";
+    public static final String MIN_POSTCODE = "6000";
+    public static final String POSTCODE = "6057";
+    public static final String MAX_POSTCODE = "6107";
+    public static final int CAPACITY1 = 13500;
+    public static final int CAPACITY2 = 50500;
+    public static final int CAPACITY3 = 23500;
+    private static final long AUTO_GENERATED_ID1 = 1L;
+    private static final long AUTO_GENERATED_ID2 = 2L;
+    private static final long AUTO_GENERATED_ID3 = 3L;
+    // Set the field values for the list of persistable (Without primary key) Battery entities
+    private static final List<Battery> persistableBatteryEntities = new ArrayList<>(
+            List.of(
+                    new Battery()
+                            .setName(CANNINGTON)
+                            .setPostcode(MAX_POSTCODE)
+                            .setCapacity(CAPACITY1),
+                    new Battery()
+                            .setName(MIDLAND)
+                            .setPostcode(POSTCODE)
+                            .setCapacity(CAPACITY2),
+                    new Battery()
+                            .setName(HAY_STREET)
+                            .setPostcode(MIN_POSTCODE)
+                            .setCapacity(CAPACITY3)
+            )
+    );
+    // Set the auto generated primary key in saved battery entities.
+    private static final List<Battery> savedBatteryEntities = new ArrayList<>(
+            List.of(
+                    new Battery()
+                            .setId(AUTO_GENERATED_ID1)
+                            .setName(CANNINGTON)
+                            .setPostcode(MAX_POSTCODE)
+                            .setCapacity(CAPACITY1),
+                    new Battery()
+                            .setId(AUTO_GENERATED_ID2)
+                            .setName(MIDLAND)
+                            .setPostcode(POSTCODE)
+                            .setCapacity(CAPACITY2),
+                    new Battery()
+                            .setId(AUTO_GENERATED_ID3)
+                            .setName(HAY_STREET)
+                            .setPostcode(MIN_POSTCODE)
+                            .setCapacity(CAPACITY3)
+            )
+    );
+
+    private static final PostCodeRangeDto postCodeRangeDto = new PostCodeRangeDto()
+            .setMinPostCode(MIN_POSTCODE)
+            .setMaxPostCode(MAX_POSTCODE);
+
+    private static final List<Battery> fetchedBatteriesByCriteria = savedBatteryEntities
+            .stream()
+            .sorted(Comparator.comparing(Battery::getName))
+            .toList();
     @Mock
     private BatteryRepository batteryRepository;
     @InjectMocks
     private BatteryServiceImpl batteryServiceImpl;
 
-    @BeforeAll
-    static void setUpForTheBatterServiceTest() {
-        // Create a list of Battery entities that batteryObjectMapper.toEntity would return
-        Battery battery = new Battery()
-                .setName("test 1")
-                .setPostcode("11")
-                .setCapacity(11);
-        Battery battery1 = new Battery()
-                .setName("test 2")
-                .setPostcode("22")
-                .setCapacity(22);
-        Battery battery2 = new Battery()
-                .setName("test 3")
-                .setPostcode("33")
-                .setCapacity(33);
-
-        // Add battery entities to the list
-        persistableBatteryEntities.addAll(List.of(battery, battery1, battery2));
-
-        // Set battery entities with the primary key. This emulates the characteristics of Spring JPA which saves the entity with an auto primary key and returns the saved object
-        battery.setId(ID1);
-        battery1.setId(ID2);
-        battery2.setId(ID3);
-
-        // Add battery entities to a new list. This is list of saved batteries which are returned by the battery repository
-        savedBatteryEntities.addAll(List.of(battery, battery1, battery2));
-    }
-
     @Test
-    void saveBatteries_should_return_list_of_battery_object_with_primary_keys() {
+    void saveBatteries_shouldReturn_listOfBatteryObjectWithPrimaryKeys() {
         // GIVEN
-        // Mock the JPA repository
         given(batteryRepository.saveAll(persistableBatteryEntities))
                 .willReturn(savedBatteryEntities);
 
         // THEN
-        // Assert the business logic for the expected response body and persisting the batteries in (SQL) Database performed via Spring JPA.
+        // Verify the business logic(s)
         then(batteryServiceImpl.saveBatteries(persistableBatteryEntities))
                 .isInstanceOf(List.class)
                 .hasOnlyElementsOfType(Battery.class)
                 .satisfies(batteries -> assertAll(
-                        "The returned entities must contain the auto generated primary keys",
-                        () -> assertEquals(ID1, savedBatteryEntities.get(0).getId()),
-                        () -> assertEquals(ID2, savedBatteryEntities.get(1).getId()),
-                        () -> assertEquals(ID3, savedBatteryEntities.get(2).getId())
+                        "Check for the auto generated primary keys in the response",
+                        () -> assertEquals(AUTO_GENERATED_ID1, savedBatteryEntities.get(0).getId()),
+                        () -> assertEquals(AUTO_GENERATED_ID2, savedBatteryEntities.get(1).getId()),
+                        () -> assertEquals(AUTO_GENERATED_ID3, savedBatteryEntities.get(2).getId())
                 ));
 
+        // VERIFY: Invocations of the dependencies (Beans)
         verify(batteryRepository, atMostOnce()).saveAll(persistableBatteryEntities);
+    }
+
+    @Test
+    void getBatteriesByCriteria_shouldReturnEmptyBatteryStatisticsObject_whenTheFetchOperation_returnsEmptyList() {
+        // GIVEN
+        given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
+                .willReturn(Collections.emptyList());
+
+        // THEN
+        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+                .isInstanceOf(BatteryStatisticDto.class)
+                .satisfies(batteryStatisticDto -> assertAll(
+                        "Check for the empty object in the response",
+                        () -> assertTrue(batteryStatisticDto.getName().isEmpty()),
+                        () -> assertEquals(0, batteryStatisticDto.getTotalWattage()),
+                        () -> assertEquals(0, batteryStatisticDto.getAverageWattCapacity())
+                ));
+
+        // VERIFY: Invocations of the dependencies (Beans)
+        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+    }
+
+    @Test
+    void getBatteriesByCriteria_shouldCalculateAccurateStatistics() {
+        int totalCapacity = CAPACITY1 + CAPACITY2 + CAPACITY3;
+        int averageCapacity = (CAPACITY1 + CAPACITY2 + CAPACITY3) / fetchedBatteriesByCriteria.size();
+
+        // GIVEN
+        given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
+                .willReturn(fetchedBatteriesByCriteria);
+
+        // THEN
+        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+                .isInstanceOf(BatteryStatisticDto.class)
+                .hasFieldOrPropertyWithValue("totalWattage", totalCapacity)
+                .hasFieldOrPropertyWithValue("averageWattCapacity", averageCapacity);
+
+        // VERIFY: Invocations of the dependencies (Beans)
+        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+    }
+
+    @Test
+    void getBatteriesByCriteria_shouldReturn_alphabeticallyOrderedByName() {
+        // GIVEN
+        given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
+                .willReturn(fetchedBatteriesByCriteria);
+
+        // THEN
+        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+                .isInstanceOf(BatteryStatisticDto.class);
+
+        // ASSERT: Alphabetical order for the name field
+        assertIterableEquals(
+                List.of(CANNINGTON, HAY_STREET, MIDLAND),
+                fetchedBatteriesByCriteria.stream()
+                        .map(Battery::getName)
+                        .toList()
+        );
     }
 }

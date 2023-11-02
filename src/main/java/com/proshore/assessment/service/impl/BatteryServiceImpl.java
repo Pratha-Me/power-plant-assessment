@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,10 +31,10 @@ public class BatteryServiceImpl implements BatteryService {
 
     @Override
     public BatteryStatisticDto getBatteriesByCriteria(PostCodeRangeDto postCodeRangeDto) {
-        List<Battery> fetchedBatteries = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+        List<Battery> fetchedBatteriesByCriteria = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
 //        Guard clause for the case in which the Battery repository returns an empty list
-        if (fetchedBatteries.isEmpty()) {
+        if (fetchedBatteriesByCriteria.isEmpty()) {
             return new BatteryStatisticDto()
                     .setName(Collections.emptyList())
                     .setTotalWattage(0)
@@ -41,15 +42,15 @@ public class BatteryServiceImpl implements BatteryService {
         }
 
 //        Calculation for the statistics (like the sum and the average of the capacity in watts)
-        int totalWattCapacity = fetchedBatteries.stream()
+        int totalWattCapacity = fetchedBatteriesByCriteria.stream()
                 .mapToInt(Battery::getCapacity)
                 .sum();
 
-        int averageWattCapacity = totalWattCapacity / fetchedBatteries.size();
+        int averageWattCapacity = totalWattCapacity / fetchedBatteriesByCriteria.size();
 
         return new BatteryStatisticDto()
                 .setName(
-                        fetchedBatteries.stream()
+                        fetchedBatteriesByCriteria.stream()
                                 .map(Battery::getName)
                                 .toList()
                 )
