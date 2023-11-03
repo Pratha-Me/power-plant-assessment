@@ -19,9 +19,9 @@ services:
     container_name: pg-db
     restart: always
     environment:
-      - POSTGRES_USER=${POSTGRESDB_USER}
-      - POSTGRES_PASSWORD=${POSTGRESDB_ROOT_PASSWORD}
-      - POSTGRES_DB=${POSTGRESDB_DATABASE}
+      - POSTGRES_USER=${DOCKER_POSTGRESDB_USER}
+      - POSTGRES_PASSWORD=${DOCKER_POSTGRESDB_ROOT_PASSWORD}
+      - POSTGRES_DB=${DOCKER_POSTGRESDB_DATABASE}
     ports:
       - "5432:5432"
 
@@ -35,9 +35,9 @@ services:
     links:
       - postgresdb:postgresdb
     environment:
-      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresdb:5432/${POSTGRESDB_DATABASE}
-      - SONARQUBE_JDBC_USERNAME=${POSTGRESDB_USER}
-      - SONARQUBE_JDBC_PASSWORD=${POSTGRESDB_ROOT_PASSWORD}
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresdb:5432/${DOCKER_POSTGRESDB_DATABASE}
+      - SONARQUBE_JDBC_USERNAME=${DOCKER_POSTGRESDB_USER}
+      - SONARQUBE_JDBC_PASSWORD=${DOCKER_POSTGRESDB_ROOT_PASSWORD}
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
