@@ -9,12 +9,16 @@ import com.proshore.assessment.service.BatteryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +69,7 @@ public class BatteryController {
      * @param postCodeRangeDto {@link Optional} the optional post code range dto
      * @return the batteries by criteria: {@link ResponseEntity}
      */
-    @GetMapping(value = "/criteria")
+    @GetMapping(value = "/postcode/range")
     @Operation(
             summary = "Gets a list of batteries with statistics",
             description = "Fetches list of batteries which satisfies the condition provided via the request parameter(s). Plus, the response body has the names of the batteries sorted alphabetically.",
@@ -85,7 +89,7 @@ public class BatteryController {
     )
     public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> postCodeRangeDto) {
         return postCodeRangeDto.map(rangeDto -> new ResponseEntity<>(
-                batteryService.getBatteriesByCriteria(rangeDto),
+                batteryService.getBatteriesWithDataBetweenRange(rangeDto),
                 HttpStatus.OK
         )).orElse(
                 new ResponseEntity<>(

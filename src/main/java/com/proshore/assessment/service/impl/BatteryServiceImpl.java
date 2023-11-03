@@ -29,7 +29,7 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public BatteryStatisticDto getBatteriesByCriteria(PostCodeRangeDto postCodeRangeDto) {
+    public BatteryStatisticDto getBatteriesWithDataBetweenRange(PostCodeRangeDto postCodeRangeDto) {
         List<Battery> fetchedBatteriesByCriteria = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
 //        Guard clause for the case in which the Battery repository returns an empty list

@@ -117,7 +117,7 @@ class BatteryServiceImplTest {
                 .willReturn(Collections.emptyList());
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
                 .satisfies(batteryStatisticDto -> assertAll(
                         "Check for the empty object in the response",
@@ -140,7 +140,7 @@ class BatteryServiceImplTest {
                 .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
                 .hasFieldOrPropertyWithValue("totalWattage", totalCapacity)
                 .hasFieldOrPropertyWithValue("averageWattCapacity", averageCapacity);
@@ -156,7 +156,7 @@ class BatteryServiceImplTest {
                 .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class);
 
         // ASSERT: Alphabetical order for the name field
