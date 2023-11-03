@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+  gateway-service:
+    build: ./gateway-service
+    image: gateway-service-img
+    container_name: gateway-service-container
+    env_file:
+      - .env.dev
+    ports:
+      - "8070:8070"
+  #    volumes:
+  #      - "/home/code/backups/mobilebanking-doc/upload:/upload"
+  main-service:
+    build: ./main-service
+    image: main-service-img
+    container_name: main-service-container
+    env_file:
+      - .env.dev
+    ports:
+      - "8081:8081"
+  #    volumes:
+  #      - "/home/code/backups/mobilebanking-doc/upload:/upload"
+  media-service:
+    build: ./media-service
+    image: media-service-img
+    container_name: media-service-container
+    env_file:
+      - .env.dev
+    ports:
+      - "5003:5003"
+  #    volumes:
+  #      - "/home/code/backups/mobilebanking-doc/upload:/upload"
+  mongodb_container:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_DATABASE: restroverse
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/mongodb-restroverse:/data/db
