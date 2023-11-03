@@ -62,7 +62,7 @@ public class BatteryController {
     /**
      * <b>Gets batteries by criteria</b>
      *
-     * @param optionalPostCodeRangeDto {@link Optional} the optional post code range dto
+     * @param postCodeRangeDto {@link Optional} the optional post code range dto
      * @return the batteries by criteria: {@link ResponseEntity}
      */
     @GetMapping(value = "/criteria")
@@ -72,20 +72,20 @@ public class BatteryController {
             operationId = "getBatteriesByCriteria",
             parameters = {
                     @Parameter(
-                            name = "optionalPostCodeRangeDto",
+                            name = "postCodeRangeDto",
                             description = "Query parameters. The minimum and the maximum values of the postcode. The boundary values (the minimum and the maximum) are inclusive",
                             required = true,
                             in = ParameterIn.QUERY,
                             schema = @Schema(
-                                    name = "optionalPostCodeRangeDto",
+                                    name = "postCodeRangeDto",
                                     implementation = PostCodeRangeDto.class
                             )
                     )
             }
     )
-    public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> optionalPostCodeRangeDto) {
-        return optionalPostCodeRangeDto.map(postCodeRangeDto -> new ResponseEntity<>(
-                batteryService.getBatteriesByCriteria(optionalPostCodeRangeDto.get()),
+    public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> postCodeRangeDto) {
+        return postCodeRangeDto.map(rangeDto -> new ResponseEntity<>(
+                batteryService.getBatteriesByCriteria(rangeDto),
                 HttpStatus.OK
         )).orElse(
                 new ResponseEntity<>(

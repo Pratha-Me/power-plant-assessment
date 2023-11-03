@@ -1,4 +1,4 @@
-package com.proshore.assessment.config;
+package com.proshore.assessment.config.cors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +15,15 @@ import java.util.Collections;
  * @created 01/11/2023: 17:26
  */
 @Configuration
-@Profile(value = "development")
-public class DevelopmentCorsConfig {
+@Profile(value = "production")
+public class ProductionCorsConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://example.com"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
         configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setExposedHeaders(Arrays.asList( "Authorization", "X-Token"));
         configuration.setAllowCredentials(true);
