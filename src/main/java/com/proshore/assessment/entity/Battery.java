@@ -31,7 +31,7 @@ public class Battery {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "post_code", nullable = false)
+    @Column(name = "postcode", nullable = false)
     private String postcode;
 
     @Column(name = "capacity", nullable = false)
