@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
  * @created 03/11/2023: 11:18
  */
 @Configuration
-@Profile("development")
+@Profile(value = {"development", "local"})
 @OpenAPIDefinition(
         info = @Info(
                 title = "Power Plant APIs (Development tools)",

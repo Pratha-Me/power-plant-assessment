@@ -65,7 +65,7 @@ public class BatteryController {
      * @param postCodeRangeDto {@link Optional} the optional post code range dto
      * @return the batteries by criteria: {@link ResponseEntity}
      */
-    @GetMapping(value = "/criteria")
+    @GetMapping(value = "/postcode/range")
     @Operation(
             summary = "Gets a list of batteries with statistics",
             description = "Fetches list of batteries which satisfies the condition provided via the request parameter(s). Plus, the response body has the names of the batteries sorted alphabetically.",
@@ -85,7 +85,7 @@ public class BatteryController {
     )
     public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> postCodeRangeDto) {
         return postCodeRangeDto.map(rangeDto -> new ResponseEntity<>(
-                batteryService.getBatteriesByCriteria(rangeDto),
+                batteryService.getBatteriesWithDataBetweenRange(rangeDto),
                 HttpStatus.OK
         )).orElse(
                 new ResponseEntity<>(

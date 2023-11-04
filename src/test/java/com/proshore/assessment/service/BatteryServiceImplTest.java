@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
 
+/**
+ * @author Pramosh Shrestha
+ * @created 02/11/2023: 17:11
+ */
 @ExtendWith(MockitoExtension.class)
 class BatteryServiceImplTest {
 
@@ -74,17 +79,17 @@ class BatteryServiceImplTest {
                             .setCapacity(CAPACITY3)
             )
     );
-
-    private static final PostCodeRangeDto postCodeRangeDto = new PostCodeRangeDto()
-            .setMinPostCode(MIN_POSTCODE)
-            .setMaxPostCode(MAX_POSTCODE);
-
     private static final List<Battery> fetchedBatteriesByCriteriaSortedByName = savedBatteryEntities
             .stream()
             .sorted(Comparator.comparing(Battery::getName))
             .toList();
+    private static final PostCodeRangeDto postCodeRangeDto = new PostCodeRangeDto()
+            .setMinPostCode(MIN_POSTCODE)
+            .setMaxPostCode(MAX_POSTCODE);
     @Mock
     private BatteryRepository batteryRepository;
+    @Mock
+    private BatteryStatisticService batteryStatisticService;
     @InjectMocks
     private BatteryServiceImpl batteryServiceImpl;
 
@@ -106,18 +111,18 @@ class BatteryServiceImplTest {
                         () -> assertEquals(AUTO_GENERATED_ID3, savedBatteryEntities.get(2).getId())
                 ));
 
-        // VERIFY: Invocations of the dependencies (Beans)
+        // VERIFY
         verify(batteryRepository, atMostOnce()).saveAll(persistableBatteryEntities);
     }
 
     @Test
-    void getBatteriesByCriteria_shouldReturnEmptyBatteryStatisticsObject_whenTheFetchOperation_returnsEmptyList() {
+    void getBatteriesByCriteria_shouldReturnEmptyBatteryStatisticsObject_whenTheFetchOperation_isNull() {
         // GIVEN
         given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
-                .willReturn(Collections.emptyList());
+                .willReturn(null);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
                 .satisfies(batteryStatisticDto -> assertAll(
                         "Check for the empty object in the response",
@@ -126,37 +131,42 @@ class BatteryServiceImplTest {
                         () -> assertEquals(0, batteryStatisticDto.getAverageWattCapacity())
                 ));
 
-        // VERIFY: Invocations of the dependencies (Beans)
+        // VERIFY
         verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
-    void getBatteriesByCriteria_shouldReturnAccurateStatistics() {
-        int totalCapacity = CAPACITY1 + CAPACITY2 + CAPACITY3;
-        int averageCapacity = (CAPACITY1 + CAPACITY2 + CAPACITY3) / fetchedBatteriesByCriteriaSortedByName.size();
-
+    void getBatteriesByCriteria_shouldReturnEmptyBatteryStatisticsObject_whenTheFetchOperation_isEmptyList() {
         // GIVEN
         given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
-                .willReturn(fetchedBatteriesByCriteriaSortedByName);
+                .willReturn(Collections.emptyList());
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
-                .hasFieldOrPropertyWithValue("totalWattage", totalCapacity)
-                .hasFieldOrPropertyWithValue("averageWattCapacity", averageCapacity);
+                .satisfies(batteryStatisticDto -> assertAll(
+                        "Check for the empty object in the response",
+                        () -> assertTrue(batteryStatisticDto.getName().isEmpty()),
+                        () -> assertEquals(0, batteryStatisticDto.getTotalWattage()),
+                        () -> assertEquals(0, batteryStatisticDto.getAverageWattCapacity())
+                ));
 
-        // VERIFY: Invocations of the dependencies (Beans)
+        // VERIFY
         verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
     void getBatteriesByCriteria_shouldReturn_batteryStatisticObject_withAlphabeticallyOrderedByName() {
         // GIVEN
+        given(batteryStatisticService.calculateTotalWattCapacity(Mockito.any()))
+                .willReturn(1);
+        given(batteryStatisticService.calculateAverageWattCapacity(Mockito.any()))
+                .willReturn(1);
         given(batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode()))
                 .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesByCriteria(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class);
 
         // ASSERT: Alphabetical order for the name field

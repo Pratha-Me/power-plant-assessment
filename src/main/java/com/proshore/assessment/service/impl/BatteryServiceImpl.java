@@ -5,11 +5,13 @@ import com.proshore.assessment.dto.PostCodeRangeDto;
 import com.proshore.assessment.entity.Battery;
 import com.proshore.assessment.repository.BatteryRepository;
 import com.proshore.assessment.service.BatteryService;
+import com.proshore.assessment.service.BatteryStatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <b>The type Battery service</b>
@@ -22,6 +24,7 @@ import java.util.List;
 public class BatteryServiceImpl implements BatteryService {
 
     private final BatteryRepository batteryRepository;
+    private final BatteryStatisticService batteryStatisticService;
 
     @Override
     public List<Battery> saveBatteries(List<Battery> batteries) {
@@ -29,23 +32,16 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public BatteryStatisticDto getBatteriesByCriteria(PostCodeRangeDto postCodeRangeDto) {
+    public BatteryStatisticDto getBatteriesWithDataBetweenRange(PostCodeRangeDto postCodeRangeDto) {
         List<Battery> fetchedBatteriesByCriteria = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
-//        Guard clause for the case in which the Battery repository returns an empty list
-        if (fetchedBatteriesByCriteria.isEmpty()) {
+        // GUARD CLAUSE: For null and empty list
+        if (Objects.isNull(fetchedBatteriesByCriteria) || fetchedBatteriesByCriteria.isEmpty()) {
             return new BatteryStatisticDto()
                     .setName(Collections.emptyList())
                     .setTotalWattage(0)
                     .setAverageWattCapacity(0);
         }
-
-//        Calculation for the statistics (like the sum and the average of the capacity in watts)
-        int totalWattCapacity = fetchedBatteriesByCriteria.stream()
-                .mapToInt(Battery::getCapacity)
-                .sum();
-
-        int averageWattCapacity = totalWattCapacity / fetchedBatteriesByCriteria.size();
 
         return new BatteryStatisticDto()
                 .setName(
@@ -53,7 +49,7 @@ public class BatteryServiceImpl implements BatteryService {
                                 .map(Battery::getName)
                                 .toList()
                 )
-                .setTotalWattage(totalWattCapacity)
-                .setAverageWattCapacity(averageWattCapacity);
+                .setTotalWattage(batteryStatisticService.calculateTotalWattCapacity(fetchedBatteriesByCriteria))
+                .setAverageWattCapacity(batteryStatisticService.calculateAverageWattCapacity(fetchedBatteriesByCriteria));
     }
 }
