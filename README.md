@@ -108,11 +108,25 @@ to run the Sonarqube services on your local machine.
 ### Open API documentations
 The Open API 3.0 is auto-configured and available for only local and development environment. For the production environment it is not configured and shut off as well, which provides reassurance. 
 
-you can open the [swagger-ui link](http://localhost:8080/power-plant/web) in your browser. 
+To access the API documentation, you can open the swagger-ui link [from here](http://localhost:8080/power-plant/web) in your browser. 
 
-The APIs are hosted here, http://localhost:8080/power-plant/web
+The APIs are hosted here, http://localhost:8080/power-plant/api-docs. From this link,
 
-A demonstration of working with the APIs is [shown here](https://drive.google.com/file/d/1-je2muYKOlEHTtqgBPToaHYPGm3IHDGE/view?usp=share_link)
+1. You can import the APIs in to Http client like Postman.
+2. [Click here](http://localhost:8080/power-plant/api-docs) to obtain the JSON format for import source in Postman
+
+Follow the [official postman documentation](https://learning.postman.com/docs/designing-and-developing-your-api/importing-an-api/#import-an-api-definition) on how to import the API Definitions.
+
+For your quick access, I have created a table to describe the Endpoints. The {{baseUrl}} is http://localhost:8080 if you are running the application in you local machine. Do not forget to adjust this value according to your environment.
+
+
+| Endpoint      | Http verb | Request Body                                                                                                                                           |                 Query parameter(s) |
+|---------------|:---------:|--------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------:|
+|     {{baseUrl}}/battery/all  |   POST    | `[ { "capacity": "<integer>", "name": "<string>", "postcode": "<string>" }, { "capacity": "<integer>", "name": "<string>", "postcode": "<string>" } ]` |                      NotApplicable |
+| {{baseUrl}}/battery/postcode/range|    GET    | Not Applicable                                                                                                                                         | minPostCode=6000, maxPostCode=6102 |
+
+
+For the POST API, you can [go here](#sample-data) for the sample data. A demonstration of working with the APIs is [shown here](https://drive.google.com/file/d/1-je2muYKOlEHTtqgBPToaHYPGm3IHDGE/view?usp=share_link)
 
 ### SonarCube Demonstration
 
@@ -129,3 +143,110 @@ If you do not have maven or gradle installed in your machine then you can use th
 I have performed the code check for my production ready code. The demonstration is [shown here](https://drive.google.com/file/d/1BLFf8aq_Vn5meYH6OXczCY8coodSGJt5/view?usp=share_link).
 
 Please note: I performed my code checks solely on the local environment. I did not setup any cloud based code check services in SonarQube.
+
+## Sample Data
+```
+[
+    {
+        "name": "Cannington",
+        "postcode": "6107",
+        "capacity": 13500
+    },
+    {
+        "name": "Midland",
+        "postcode": "6057",
+        "capacity": 50500
+    },
+    {
+        "name": "Hay Street",
+        "postcode": "6000",
+        "capacity": 23500
+    },
+    {
+        "name": "Mount Adams",
+        "postcode": "6525",
+        "capacity": 12000
+    },
+    {
+        "name": "Koolan Island",
+        "postcode": "6733",
+        "capacity": 10000
+    },
+    {
+        "name": "Armadale",
+        "postcode": "6992",
+        "capacity": 25000
+    },
+    {
+        "name": "Lesmurdie",
+        "postcode": "6076",
+        "capacity": 13500
+    },
+    {
+        "name": "Kalamunda",
+        "postcode": "6076",
+        "capacity": 13500
+    },
+    {
+        "name": "Carmel",
+        "postcode": "6076",
+        "capacity": 36000
+    },
+    {
+        "name": "Bentley",
+        "postcode": "6102",
+        "capacity": 85000
+    },
+    {
+        "name": "Akunda Bay",
+        "postcode": "2084",
+        "capacity": 13500
+    },
+    {
+        "name": "Werrington County",
+        "postcode": "2747",
+        "capacity": 13500
+    },
+    {
+        "name": "Bagot",
+        "postcode": "0820",
+        "capacity": 27000
+    },
+    {
+        "name": "Yirrkala",
+        "postcode": "0880",
+        "capacity": 13500
+    },
+    {
+        "name": "University of Melbourne",
+        "postcode": "3010",
+        "capacity": 85000
+    },
+    {
+        "name": "Norfolk Island",
+        "postcode": "2899",
+        "capacity": 13500
+    },
+    {
+        "name": "Ootha",
+        "postcode": "2875",
+        "capacity": 13500
+    },
+    {
+        "name": "Kent Town",
+        "postcode": "5067",
+        "capacity": 13500
+    },
+    {
+        "name": "Northgate Mc",
+        "postcode": "9464",
+        "capacity": 13500
+    },
+    {
+        "name": "Gold Coast Mc",
+        "postcode": "9729",
+        "capacity": 50000
+    }
+]
+```
+
