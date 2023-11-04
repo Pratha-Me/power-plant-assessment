@@ -191,7 +191,7 @@ class BatteryControllerTest {
     @Test
     void whenValidParameter_thenHttpStatus200() {
         // GIVEN
-        given(batteryService.getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class)))
+        given(batteryService.getBatteriesWithStatisticBetweenPostCodeRange(Mockito.any(PostCodeRangeDto.class)))
                 .willReturn(fetchedBatteryStatisticDto);
 
         try {
@@ -205,7 +205,7 @@ class BatteryControllerTest {
                     .andDo(MockMvcResultHandlers.print());
 
             // VERIFY
-            verify(batteryService, times(1)).getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class));
+            verify(batteryService, times(1)).getBatteriesWithStatisticBetweenPostCodeRange(Mockito.any(PostCodeRangeDto.class));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,7 +215,7 @@ class BatteryControllerTest {
     @Test
     void whenValidParameter_thenReturnBatteryStatisticObject_withCorrectFieldTypeAndValue() {
         // GIVEN
-        given(batteryService.getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class)))
+        given(batteryService.getBatteriesWithStatisticBetweenPostCodeRange(Mockito.any(PostCodeRangeDto.class)))
                 .willReturn(fetchedBatteryStatisticDto);
 
         try {
@@ -232,7 +232,7 @@ class BatteryControllerTest {
                     .andDo(MockMvcResultHandlers.print());
 
             // VERIFY
-            verify(batteryService, times(1)).getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class));
+            verify(batteryService, times(1)).getBatteriesWithStatisticBetweenPostCodeRange(Mockito.any(PostCodeRangeDto.class));
 
         } catch (Exception e) {
             e.printStackTrace();

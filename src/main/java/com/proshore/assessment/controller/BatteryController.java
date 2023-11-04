@@ -85,7 +85,7 @@ public class BatteryController {
     )
     public ResponseEntity<BatteryStatisticDto> getBatteriesByCriteria(@Valid Optional<PostCodeRangeDto> postCodeRangeDto) {
         return postCodeRangeDto.map(rangeDto -> new ResponseEntity<>(
-                batteryService.getBatteriesWithDataBetweenRange(rangeDto),
+                batteryService.getBatteriesWithStatisticBetweenPostCodeRange(rangeDto),
                 HttpStatus.OK
         )).orElse(
                 new ResponseEntity<>(
