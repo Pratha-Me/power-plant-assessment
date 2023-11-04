@@ -112,7 +112,7 @@ you can open the [swagger-ui link](http://localhost:8080/power-plant/web) in you
 
 The APIs are hosted here, http://localhost:8080/power-plant/web
 
-A demonstration of working with the APIs is [shown here](Pratha)
+A demonstration of working with the APIs is [shown here](https://drive.google.com/file/d/1-je2muYKOlEHTtqgBPToaHYPGm3IHDGE/view?usp=share_link)
 
 ### SonarCube Demonstration
 
@@ -126,6 +126,6 @@ Follow guidelines from [this official documentation](https://docs.sonarsource.co
 
 If you do not have maven or gradle installed in your machine then you can use the bundled wrapper. Replace mvn or gradle with ./mvnw or ./gradlew.
 
-I have performed the code check for my production ready code. The demonstration can be viewed from [this link](Pratha).
+I have performed the code check for my production ready code. The demonstration is [shown here](https://drive.google.com/file/d/1BLFf8aq_Vn5meYH6OXczCY8coodSGJt5/view?usp=share_link).
 
 Please note: I performed my code checks solely on the local environment. I did not setup any cloud based code check services in SonarQube.
