@@ -20,8 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Pramosh Shrestha
@@ -112,7 +111,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).saveAll(persistableBatteryEntities);
+        verify(batteryRepository, times(1)).saveAll(persistableBatteryEntities);
     }
 
     @Test
@@ -132,7 +131,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+        verify(batteryRepository, times(1)).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
@@ -152,7 +151,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+        verify(batteryRepository, times(1)).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
