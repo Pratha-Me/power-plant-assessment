@@ -32,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -139,7 +140,7 @@ class BatteryControllerTest {
                     .andExpect(status().isCreated())
                     .andDo(MockMvcResultHandlers.print());
 
-            // VERIFY: Invocations of the dependencies (Beans)
+            // VERIFY
             verify(batteryObjectMapper, times(1)).toEntities(Mockito.anyList());
             verify(batteryObjectMapper, times(1)).toDtos(Mockito.anyList());
             verify(batteryService, times(1)).saveBatteries(Mockito.anyList());
@@ -150,7 +151,7 @@ class BatteryControllerTest {
     }
 
     @Test
-    void whenExpectedResponse_thenReturnsListOfSavedBatteryDtoObject() {
+    void whenExpectedResponse_thenReturnListOfSavedBatteryDtoObject() {
         // GIVEN
         given(batteryObjectMapper.toEntities(Mockito.anyList()))
                 .willReturn(persistableBatteries);
@@ -161,11 +162,12 @@ class BatteryControllerTest {
 
         try {
             // WHEN
-            String contentAsString = mockMvc.perform(
+            String deserializedResponseObjectAsString = mockMvc.perform(
                             post("/battery/all")
                                     .content(objectMapper.writeValueAsString(batteryDtos))
                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     )
+                    // THEN
                     .andExpect(jsonPath("$", Matchers.instanceOf(List.class), List.class))
                     .andDo(MockMvcResultHandlers.print())
                     .andReturn()
@@ -173,10 +175,10 @@ class BatteryControllerTest {
                     .getContentAsString();
 
 
-            // THEN
-            assertThat(contentAsString).isEqualTo(objectMapper.writeValueAsString(savedBatteryDtos));
+            // ASSERT: Deserialized response equals expected object with expected field value
+            assertThat(deserializedResponseObjectAsString).isEqualTo(objectMapper.writeValueAsString(savedBatteryDtos));
 
-            // VERIFY: Invocations of the dependencies (Beans)
+            // VERIFY
             verify(batteryObjectMapper, times(1)).toEntities(Mockito.anyList());
             verify(batteryObjectMapper, times(1)).toDtos(Mockito.anyList());
             verify(batteryService, times(1)).saveBatteries(Mockito.anyList());
@@ -202,7 +204,7 @@ class BatteryControllerTest {
                     .andExpect(status().isOk())
                     .andDo(MockMvcResultHandlers.print());
 
-            // VERIFY: Invocations of the dependencies (Beans)
+            // VERIFY
             verify(batteryService, times(1)).getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class));
 
         } catch (Exception e) {
@@ -211,7 +213,7 @@ class BatteryControllerTest {
     }
 
     @Test
-    void whenValidParameter_andReturnsBatteryStatisticObject() {
+    void whenValidParameter_thenReturnBatteryStatisticObject_withCorrectFieldTypeAndValue() {
         // GIVEN
         given(batteryService.getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class)))
                 .willReturn(fetchedBatteryStatisticDto);
@@ -224,9 +226,12 @@ class BatteryControllerTest {
                     )
                     // THEN
                     .andExpect(jsonPath("$", Matchers.instanceOf(BatteryStatisticDto.class), BatteryStatisticDto.class))
+                    .andExpect(jsonPath("$.totalWattage", greaterThanOrEqualTo(0)))
+                    .andExpect(jsonPath("$.averageWattCapacity", greaterThanOrEqualTo(0)))
+                    .andExpect(jsonPath("$.name", hasItem(isA(String.class))))
                     .andDo(MockMvcResultHandlers.print());
 
-            // VERIFY: Invocations of the dependencies (Beans)
+            // VERIFY
             verify(batteryService, times(1)).getBatteriesWithDataBetweenRange(Mockito.any(PostCodeRangeDto.class));
 
         } catch (Exception e) {

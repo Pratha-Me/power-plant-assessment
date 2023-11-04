@@ -15,7 +15,7 @@ import java.util.Collections;
  * @created 01/11/2023: 17:26
  */
 @Configuration
-@Profile(value = "development")
+@Profile(value = {"development", "local"})
 public class DevelopmentCorsConfig {
 
     @Bean
