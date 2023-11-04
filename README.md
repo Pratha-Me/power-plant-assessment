@@ -44,9 +44,11 @@ Once the project has been cloned. You can just navigate yourself to the root dir
 1. The root directory bears all the essential scripts and configuration files for the complete operations of the project. Any script or command must be executed from the root directory
 2. There are three shell scripts in the root directory. The first is start-script.sh, which will spin up docker containers and make the service available without breaking a sweat. The second is stop-script.sh, this script will terminate running services. The last is sonarqube-script.sh, which will trigger the code check as outlined by the SonarQube.
 3. The time to build the project, pull the docker images, and run the docker containers might take around 5-10 minutes or so for the first time. On subsequent start and stop cycle the application will spin up and down quicker. The docker needs to pull the images for Java 17, PostgreSQL 15, and SonarQube, so, the strength of you internet connection will be vital to reduce the boot up time, especially for the first run.
-4. In the case where docker is not available or installed, the database and SonarQube can be sourced from other means. The section herein, [Without Docker](#without-docker) provides further details.
+4. In the case where docker is not available or installed, the database and SonarQube can be sourced from other means. The section herein, [Without Docker](#c-without-docker) provides further details.
 
-## Start & Stop from the shell script
+--- 
+
+## A. Start & Stop the project from the shell script
 The file `start-script.sh` present in the root directory has sufficient commands to build and run the project.
 
    ```shell
@@ -54,13 +56,19 @@ The file `start-script.sh` present in the root directory has sufficient commands
    ```
 This script alone will execute all the necessary commands to make the service available. Alternatively, you can opt for the procedures laid out in the immediate section below.
 
-Similar to the start script, the stop script will perform necessary shut down steps.
+Similar to the start script, the stop script will perform necessary shut down steps to stop the project. This is the recommended option.
 
    ```shell
    sh stop-script.sh
    ```
 
-## Manual Build & Run
+You can manually stop the project by. However, this option should be kept as the last resort
+
+   ```shell
+   docker-compose down
+   ```
+
+## B. Manual Build & Run
 ### 1. Run Maven tools
 <dl>
 <dt>With the test cases</dt>
@@ -92,7 +100,7 @@ OR
    docker-compose -p powerplant-web-services up -d
    ```
 
-## Without Docker
+## C. Without Docker
 ### For Postgres Database
 Navigate to the file `src/main/resources/application-local.properties`then replace every term in the format like `![PLACEHOLDER]` with the correct values.
 
@@ -102,7 +110,7 @@ For example, if you want to set `admin` in `spring.datasource.username=![POSTGRE
 Please follow the [sonarqube official guidelines](https://docs.sonarsource.com/sonarqube/latest/try-out-sonarqube/)
 to run the Sonarqube services on your local machine.
 
-## Consuming Services
+## D. Consuming Services
 <b>Once you have the application up and running</b> continue with following two sections on Open APIs to consume the REST APIs and SonarQube to monitor and generate exhaustive code analysis reports.
 
 ### Open API documentations
@@ -126,7 +134,7 @@ For your quick access, I have created a table to describe the Endpoints. The {{b
 | {{baseUrl}}/battery/postcode/range|    GET    | Not Applicable                                                                                                                                         | minPostCode=6000, maxPostCode=6102 |
 
 
-For the POST API, you can [go here](#sample-data) for the sample data. A demonstration of working with the APIs is [shown here](https://drive.google.com/file/d/1-je2muYKOlEHTtqgBPToaHYPGm3IHDGE/view?usp=share_link)
+For the POST API, you can [go here](#d-sample-data) for the sample data. A demonstration of working with the APIs is [shown here](https://drive.google.com/file/d/1-je2muYKOlEHTtqgBPToaHYPGm3IHDGE/view?usp=share_link)
 
 ### SonarCube Demonstration
 
@@ -144,7 +152,7 @@ I have performed the code check for my production ready code. The demonstration 
 
 Please note: I performed my code checks solely on the local environment. I did not setup any cloud based code check services in SonarQube.
 
-## Sample Data
+## D. Sample Data
 ```
 [
     {
