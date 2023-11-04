@@ -30,5 +30,5 @@ public interface BatteryService {
      * @param postCodeRangeDto {@link PostCodeRangeDto}: the post code range dto
      * @return {@link BatteryStatisticDto}
      */
-    BatteryStatisticDto getBatteriesWithDataBetweenRange(PostCodeRangeDto postCodeRangeDto);
+    BatteryStatisticDto getBatteriesWithStatisticBetweenPostCodeRange(PostCodeRangeDto postCodeRangeDto);
 }

@@ -20,8 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Pramosh Shrestha
@@ -112,7 +111,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).saveAll(persistableBatteryEntities);
+        verify(batteryRepository, times(1)).saveAll(persistableBatteryEntities);
     }
 
     @Test
@@ -122,7 +121,7 @@ class BatteryServiceImplTest {
                 .willReturn(null);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithStatisticBetweenPostCodeRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
                 .satisfies(batteryStatisticDto -> assertAll(
                         "Check for the empty object in the response",
@@ -132,7 +131,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+        verify(batteryRepository, times(1)).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
@@ -142,7 +141,7 @@ class BatteryServiceImplTest {
                 .willReturn(Collections.emptyList());
 
         // THEN
-        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithStatisticBetweenPostCodeRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class)
                 .satisfies(batteryStatisticDto -> assertAll(
                         "Check for the empty object in the response",
@@ -152,7 +151,7 @@ class BatteryServiceImplTest {
                 ));
 
         // VERIFY
-        verify(batteryRepository, atMostOnce()).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
+        verify(batteryRepository, times(1)).findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
     }
 
     @Test
@@ -166,7 +165,7 @@ class BatteryServiceImplTest {
                 .willReturn(fetchedBatteriesByCriteriaSortedByName);
 
         // THEN
-        then(batteryServiceImpl.getBatteriesWithDataBetweenRange(postCodeRangeDto))
+        then(batteryServiceImpl.getBatteriesWithStatisticBetweenPostCodeRange(postCodeRangeDto))
                 .isInstanceOf(BatteryStatisticDto.class);
 
         // ASSERT: Alphabetical order for the name field

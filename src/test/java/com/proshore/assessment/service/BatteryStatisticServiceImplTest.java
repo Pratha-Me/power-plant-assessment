@@ -15,7 +15,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Pramosh Shrestha
@@ -94,8 +95,8 @@ public class BatteryStatisticServiceImplTest {
     @Test
     void averageWattCapacity_mustBePositive_andAccurate() {
         // GIVEN
-        when(batteryStatisticService.calculateTotalWattCapacity(batteryEntities))
-                .thenReturn(totalCapacity);
+        given(batteryStatisticService.calculateTotalWattCapacity(batteryEntities))
+                .willReturn(totalCapacity);
 
         // WHEN
         int calculatedAverage = batteryStatisticService.calculateAverageWattCapacity(batteryEntities);
