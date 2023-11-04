@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <b>The type Battery service</b>
@@ -34,8 +35,8 @@ public class BatteryServiceImpl implements BatteryService {
     public BatteryStatisticDto getBatteriesWithDataBetweenRange(PostCodeRangeDto postCodeRangeDto) {
         List<Battery> fetchedBatteriesByCriteria = batteryRepository.findBatteriesByPostcodeBetweenOrderByName(postCodeRangeDto.getMinPostCode(), postCodeRangeDto.getMaxPostCode());
 
-//        GUARD CLAUSE: For an empty list
-        if (fetchedBatteriesByCriteria.isEmpty()) {
+        // GUARD CLAUSE: For null and empty list
+        if (Objects.isNull(fetchedBatteriesByCriteria) || fetchedBatteriesByCriteria.isEmpty()) {
             return new BatteryStatisticDto()
                     .setName(Collections.emptyList())
                     .setTotalWattage(0)

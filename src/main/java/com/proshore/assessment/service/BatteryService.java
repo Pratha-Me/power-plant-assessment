@@ -1,6 +1,5 @@
 package com.proshore.assessment.service;
 
-import com.proshore.assessment.dto.BatteryDto;
 import com.proshore.assessment.dto.BatteryStatisticDto;
 import com.proshore.assessment.dto.PostCodeRangeDto;
 import com.proshore.assessment.entity.Battery;
@@ -11,6 +10,7 @@ import java.util.List;
  * <b>The interface Battery service</b>
  *
  * <p>This service provides create and get business logic.</p>
+ *
  * @author Pramosh Shrestha
  * @created 01 /11/2023: 19:31
  */

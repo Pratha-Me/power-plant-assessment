@@ -25,7 +25,7 @@ public class ProductionCorsConfig {
         configuration.setAllowedOrigins(Collections.singletonList("http://example.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
         configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
-        configuration.setExposedHeaders(Arrays.asList( "Authorization", "X-Token"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "X-Token"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

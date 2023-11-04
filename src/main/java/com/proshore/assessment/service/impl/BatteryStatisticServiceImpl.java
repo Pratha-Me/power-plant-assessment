@@ -5,6 +5,7 @@ import com.proshore.assessment.service.BatteryStatisticService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Pramosh Shrestha
@@ -15,12 +16,22 @@ public class BatteryStatisticServiceImpl implements BatteryStatisticService {
 
     @Override
     public int calculateAverageWattCapacity(List<Battery> batteries) {
+        // GUARD CLAUSE: For null and empty list
+        if (Objects.isNull(batteries) || batteries.isEmpty()) {
+            return 0;
+        }
+
         int totalWattCapacity = calculateTotalWattCapacity(batteries);
         return totalWattCapacity / batteries.size();
     }
 
     @Override
     public int calculateTotalWattCapacity(List<Battery> batteries) {
+        // GUARD CLAUSE: For null and empty list
+        if (Objects.isNull(batteries) || batteries.isEmpty()) {
+            return 0;
+        }
+
         return batteries.stream()
                 .mapToInt(Battery::getCapacity)
                 .sum();

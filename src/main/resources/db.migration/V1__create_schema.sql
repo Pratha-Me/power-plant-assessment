@@ -10,7 +10,7 @@ create table if not exists battery
     name     varchar(255) not null
         constraint battery_name_uk
             unique,
-    postcode varchar(10) not null
+    postcode varchar(10)  not null
 );
 
 alter table if exists battery

@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * <b>The interface Battery statistic service.</b>
  * <p>This service provides mission critical statistics on batteries.</p>
+ *
  * @author Pramosh Shrestha
  * @created 03 /11/2023: 23:31
  */
